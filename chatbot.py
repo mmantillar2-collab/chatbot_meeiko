@@ -153,7 +153,7 @@ respuestas = {
     "saludo": "Hola, ¿en qué te puedo ayudar?",
     "clientes": "Actualmente tenemos un total de {} clientes registrados.".format(df["Cliente"].nunique()),
     "cobertura": "Las coberturas disponibles son: {}".format(", ".join(df["Cobertura"].unique())),
-    "cargo_mensual": "Los cargos mensuales acumulados son: {}".format(", ".join(df["Prima Mensual Auto"].sum())),
+    "cargo_mensual": "Los cargos mensuales acumulados son: {}".format(df["Prima Mensual Auto"].sum()),
     "ventas": "Los canales de venta disponibles son: {}".format(", ".join(df["Canal Ventas"].unique())),
     "poliza": "Existen {} tipos de pólizas: {}".format(
         df["Tipo Poliza"].nunique(), ", ".join(df["Tipo Poliza"].unique())
@@ -162,11 +162,11 @@ respuestas = {
 }
 
 mapeo_entradas = {
-    "cargo_mensual": ["cargo mensual", "acumulado mensual", "cómo van las ventas", "informe de ventas", "total de ventas este mes", "ventas acumuladas"],
+    "cargo_mensual": ["ventas", "cargo mensual", "acumulado mensual", "cómo van las ventas", "informe de ventas", "total de ventas este mes", "ventas acumuladas"],
     "ventas": ["dime los canales de ventas", "canales de ventas", "informe canales de ventas", "canales"],
     "clientes": ["cuántos clientes nuevos", "clientes ganados", "estadísticas de clientes", "informe de clientes", "nuevos clientes trimestre"],
-    "campañas": ["cómo van las campañas", "rendimiento de campañas", "informe de campañas", "datos de publicidad", "estadísticas de campañas"],
-    "reporte": ["quiero un reporte", "muéstrame un gráfico", "visualización de datos", "generar reporte", "haz un informe"],
+    "cobertura": ["cobertura", "rendimiento de cobertura", "coberturas", "coberturas disponibles", "estadísticas de cobertura"],
+    "poliza": ["poliza", "tipo poliza", "polizas", "generar poliza"],
     "saludo": ["hola", "buenas", "qué tal", "hey", "saludos"]
 }
 
@@ -182,7 +182,7 @@ def buscar_intencion(user_input, training_phrases):
     for intent, phrases in training_phrases.items():
         if user_input in [p.lower() for p in phrases]:
             return intent
-    return None
+    return ""
 
 # Procesar consulta
 if entrada:
@@ -194,6 +194,8 @@ if entrada:
         if clave in entrada_lower:
             respuesta = texto
             break
+        else:
+            respuesta = "Lo siento, no entendí tu consulta. Intenta con otra pregunta."
 
     # Guardar en historial
     st.session_state.historial.append(("Tú", entrada))
